@@ -1,0 +1,624 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding Practice | Interview Prep</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fb;color:#202b3c}
+header{background:linear-gradient(135deg,#111b55,#4059a8);color:white;padding:35px 20px;text-align:center}
+header h1{margin:0 0 10px}
+header p{margin:0;color:#e0e6ff}
+nav{background:white;padding:14px;text-align:center;box-shadow:0 2px 8px #0001}
+nav a{color:#36559b;text-decoration:none;font-weight:bold}
+main{max-width:1100px;margin:28px auto;padding:0 18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.stat{background:white;border-radius:10px;padding:18px;box-shadow:0 3px 12px #18264a12}
+.stat p{margin:0 0 8px;color:#536079;font-weight:bold}
+.stat h2{margin:0;color:#263d83;font-size:28px}
+.progress-track{height:14px;background:#dce3f0;border-radius:10px;overflow:hidden;margin:12px 0 8px}
+#progressBar{height:100%;width:0;background:#2a9468;transition:width .3s}
+#progressText{font-size:14px;color:#536079;margin:0 0 28px}
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+input,select{padding:12px;border:1px solid #cbd3e1;border-radius:7px;background:white;font-size:14px}
+#search{flex:1;min-width:220px}
+.problem-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.problem{background:white;padding:20px;border-radius:12px;box-shadow:0 3px 12px #18264a12;min-width:0}
+.problem.completed{border-top:4px solid #2a9468}
+.badge{display:inline-block;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:bold;background:#e8edf5;margin-bottom:10px}
+.easy{color:#176342;background:#d5f3e5}
+.medium{color:#8b5b00;background:#fff0c2}
+.hard{color:#a52c38;background:#ffe0e3}
+.problem h3{font-size:19px;margin:8px 0}
+.topic{color:#536079;font-size:13px}
+.description{line-height:1.6}
+.example{background:#f1f4fa;padding:12px;border-radius:7px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+button{padding:10px 13px;border:0;border-radius:6px;cursor:pointer;background:#4169c1;color:white;margin:5px 5px 0 0}
+button:hover{opacity:.9}
+.complete-btn{background:#e8edf5;color:#34415a}
+.complete-btn.done{background:#d5f3e5;color:#176342}
+.solution{margin-top:12px}
+pre{padding:14px;border-radius:8px;background:#172033;color:#e5edff;overflow-x:auto;white-space:pre;line-height:1.5;font-size:13px}
+.empty{background:white;border-radius:10px;padding:25px;text-align:center;grid-column:1/-1}
+#statusMessage{color:#536079}
+footer{text-align:center;padding:25px;color:#6b7588}
+@media(max-width:650px){.problem-list,.stats{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+<header>
+<h1>💻 Coding Practice</h1>
+<p>Practice consistently. Improve your problem-solving. Succeed in placements.</p>
+</header>
+
+<nav><a href="/">← Back to Interview Prep Home</a></nav>
+
+<main>
+<h2>Your Coding Dashboard</h2>
+
+<section class="stats">
+    <div class="stat"><p>Total Problems</p><h2 id="total">20</h2></div>
+    <div class="stat"><p>Completed</p><h2 id="completed">0</h2></div>
+    <div class="stat"><p>Remaining</p><h2 id="remaining">20</h2></div>
+</section>
+
+<div class="progress-track">
+    <div id="progressBar"></div>
+</div>
+<p id="progressText">0% completed</p>
+
+<h2>Problem Bank</h2>
+<p>Search problems, filter by topic or difficulty, view Java solutions, and track your progress.</p>
+
+<div class="filters">
+    <input id="search" type="search" placeholder="Search problems...">
+    <select id="difficulty">
+        <option value="">All Difficulties</option>
+        <option>Easy</option><option>Medium</option><option>Hard</option>
+    </select>
+    <select id="topic">
+        <option value="">All Topics</option>
+        <option>Arrays</option><option>Strings</option><option>Searching</option>
+        <option>Sorting</option><option>Hashing</option><option>Linked Lists</option>
+        <option>Stack</option><option>Math</option>
+    </select>
+    <select id="completion">
+        <option value="">All Statuses</option>
+        <option value="done">Completed</option>
+        <option value="todo">Not Completed</option>
+    </select>
+</div>
+
+<p id="statusMessage" role="status"></p>
+<section id="problemList" class="problem-list"></section>
+</main>
+
+<footer>Interview Prep | Every problem makes you stronger.</footer>
+
+<script>
+const problems = [
+{
+id:1,title:"Two Sum",difficulty:"Easy",topic:"Hashing",
+description:"Return the indices of two numbers whose sum equals the target. Assume exactly one solution exists.",
+input:"nums = [2, 7, 11, 15], target = 9",output:"[0, 1]",
+explanation:"nums[0] + nums[1] = 9.",
+solution:`import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int needed = target - nums[i];
+            if (map.containsKey(needed))
+                return new int[]{map.get(needed), i};
+            map.put(nums[i], i);
+        }
+        return new int[]{};
+    }
+}`
+},
+{
+id:2,title:"Reverse an Array",difficulty:"Easy",topic:"Arrays",
+description:"Reverse an integer array in place.",
+input:"[1, 2, 3, 4, 5]",output:"[5, 4, 3, 2, 1]",
+explanation:"Swap values from both ends, moving toward the middle.",
+solution:`import java.util.Arrays;
+class Main {
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 4, 5};
+        int l = 0, r = a.length - 1;
+        while (l < r) {
+            int temp = a[l];
+            a[l++] = a[r];
+            a[r--] = temp;
+        }
+        System.out.println(Arrays.toString(a));
+    }
+}`
+},
+{
+id:3,title:"Palindrome String",difficulty:"Easy",topic:"Strings",
+description:"Check whether a string reads the same forward and backward.",
+input:'"madam"',output:"true",
+explanation:"The characters match when checked from both ends.",
+solution:`class Solution {
+    public boolean isPalindrome(String s) {
+        int l = 0, r = s.length() - 1;
+        while (l < r) {
+            if (s.charAt(l++) != s.charAt(r--))
+                return false;
+        }
+        return true;
+    }
+}`
+},
+{
+id:4,title:"Binary Search",difficulty:"Easy",topic:"Searching",
+description:"Find a target's index in a sorted array. Return -1 if absent.",
+input:"[1, 3, 5, 7, 9], target = 7",output:"3",
+explanation:"The target 7 is at index 3.",
+solution:`class Solution {
+    public int search(int[] a, int target) {
+        int l = 0, r = a.length - 1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (a[m] == target) return m;
+            if (a[m] < target) l = m + 1;
+            else r = m - 1;
+        }
+        return -1;
+    }
+}`
+},
+{
+id:5,title:"Find Largest Element",difficulty:"Easy",topic:"Arrays",
+description:"Find the largest integer in a non-empty array.",
+input:"[4, 9, 2, 15, 6]",output:"15",
+explanation:"Maintain the maximum value while traversing the array.",
+solution:`class Solution {
+    public int largest(int[] a) {
+        int max = a[0];
+        for (int x : a)
+            if (x > max) max = x;
+        return max;
+    }
+}`
+},
+{
+id:6,title:"Remove Duplicates from Sorted Array",difficulty:"Medium",topic:"Arrays",
+description:"Remove duplicates in place and return the number of unique values.",
+input:"[1, 1, 2, 2, 3]",output:"Length = 3; values = [1, 2, 3]",
+explanation:"Use a pointer to place each new distinct value.",
+solution:`class Solution {
+    public int removeDuplicates(int[] nums) {
+        if (nums.length == 0) return 0;
+        int k = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] != nums[k - 1])
+                nums[k++] = nums[i];
+        }
+        return k;
+    }
+}`
+},
+{
+id:7,title:"Merge Sort",difficulty:"Medium",topic:"Sorting",
+description:"Sort an array using divide and conquer.",
+input:"[5, 2, 8, 1, 3]",output:"[1, 2, 3, 5, 8]",
+explanation:"Split, recursively sort, then merge the parts.",
+solution:`import java.util.Arrays;
+class Main {
+    static void sort(int[] a, int l, int r) {
+        if (l >= r) return;
+        int m = l + (r - l) / 2;
+        sort(a, l, m);
+        sort(a, m + 1, r);
+        int[] t = new int[r - l + 1];
+        int i = l, j = m + 1, k = 0;
+        while (i <= m && j <= r)
+            t[k++] = a[i] <= a[j] ? a[i++] : a[j++];
+        while (i <= m) t[k++] = a[i++];
+        while (j <= r) t[k++] = a[j++];
+        for (int p = 0; p < t.length; p++) a[l + p] = t[p];
+    }
+    public static void main(String[] args) {
+        int[] a = {5, 2, 8, 1, 3};
+        sort(a, 0, a.length - 1);
+        System.out.println(Arrays.toString(a));
+    }
+}`
+},
+{
+id:8,title:"Longest Substring Without Repeating Characters",difficulty:"Medium",topic:"Strings",
+description:"Find the length of the longest substring without repeated characters.",
+input:'"abcabcbb"',output:"3",
+explanation:'"abc" is a longest substring with no repeated characters.',
+solution:`import java.util.HashMap;
+import java.util.Map;
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> seen = new HashMap<>();
+        int left = 0, best = 0;
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            if (seen.containsKey(c))
+                left = Math.max(left, seen.get(c) + 1);
+            seen.put(c, right);
+            best = Math.max(best, right - left + 1);
+        }
+        return best;
+    }
+}`
+},
+{
+id:9,title:"Valid Anagram",difficulty:"Easy",topic:"Hashing",
+description:"Check whether two lowercase English strings contain the same letters with the same frequencies.",
+input:'s = "listen", t = "silent"',output:"true",
+explanation:"Both words contain the same letters.",
+solution:`class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) return false;
+        int[] count = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
+            count[t.charAt(i) - 'a']--;
+        }
+        for (int n : count)
+            if (n != 0) return false;
+        return true;
+    }
+}`
+},
+{
+id:10,title:"First and Last Position",difficulty:"Hard",topic:"Searching",
+description:"Find the first and last positions of a target in a sorted array, or [-1, -1] if absent.",
+input:"[5, 7, 7, 8, 8, 10], target = 8",output:"[3, 4]",
+explanation:"Run binary search for the first occurrence and again for the last.",
+solution:`class Solution {
+    public int[] searchRange(int[] a, int target) {
+        return new int[]{bound(a, target, true),
+                         bound(a, target, false)};
+    }
+    int bound(int[] a, int x, boolean first) {
+        int l = 0, r = a.length - 1, ans = -1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (a[m] == x) {
+                ans = m;
+                if (first) r = m - 1;
+                else l = m + 1;
+            } else if (a[m] < x) l = m + 1;
+            else r = m - 1;
+        }
+        return ans;
+    }
+}`
+},
+{
+id:11,title:"Move Zeroes",difficulty:"Easy",topic:"Arrays",
+description:"Move all zeroes to the end while preserving the order of non-zero values.",
+input:"[0, 1, 0, 3, 12]",output:"[1, 3, 12, 0, 0]",
+explanation:"Write non-zero values first, then fill the remaining positions with zeroes.",
+solution:`import java.util.Arrays;
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int k = 0;
+        for (int x : nums)
+            if (x != 0) nums[k++] = x;
+        while (k < nums.length) nums[k++] = 0;
+    }
+}`
+},
+{
+id:12,title:"Maximum Subarray Sum",difficulty:"Medium",topic:"Arrays",
+description:"Find the largest sum of a contiguous, non-empty subarray.",
+input:"[-2, 1, -3, 4, -1, 2, 1, -5, 4]",output:"6",
+explanation:"The subarray [4, -1, 2, 1] has sum 6.",
+solution:`class Solution {
+    public int maxSubArray(int[] nums) {
+        int current = nums[0], best = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            current = Math.max(nums[i], current + nums[i]);
+            best = Math.max(best, current);
+        }
+        return best;
+    }
+}`
+},
+{
+id:13,title:"Valid Parentheses",difficulty:"Easy",topic:"Stack",
+description:"Check whether brackets are correctly matched and nested.",
+input:'"()[]{}"',output:"true",
+explanation:"Every opening bracket has a matching closing bracket in the correct order.",
+solution:`import java.util.ArrayDeque;
+import java.util.Deque;
+class Solution {
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '[' || c == '{') stack.push(c);
+            else {
+                if (stack.isEmpty()) return false;
+                char open = stack.pop();
+                if ((c == ')' && open != '(') ||
+                    (c == ']' && open != '[') ||
+                    (c == '}' && open != '{')) return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+}`
+},
+{
+id:14,title:"Reverse a Linked List",difficulty:"Easy",topic:"Linked Lists",
+description:"Reverse a singly linked list and return its new head.",
+input:"1 -> 2 -> 3 -> null",output:"3 -> 2 -> 1 -> null",
+explanation:"Reverse each node's next pointer using previous and current references.",
+solution:`class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null, curr = head;
+        while (curr != null) {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+}`
+},
+{
+id:15,title:"Fizz Buzz",difficulty:"Easy",topic:"Math",
+description:"For numbers 1 through n, output Fizz for multiples of 3, Buzz for multiples of 5, and FizzBuzz for both.",
+input:"n = 5",output:'["1", "2", "Fizz", "4", "Buzz"]',
+explanation:"Check divisibility by 15 before checking 3 or 5 separately.",
+solution:`import java.util.ArrayList;
+import java.util.List;
+class Solution {
+    public List<String> fizzBuzz(int n) {
+        List<String> result = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            if (i % 15 == 0) result.add("FizzBuzz");
+            else if (i % 3 == 0) result.add("Fizz");
+            else if (i % 5 == 0) result.add("Buzz");
+            else result.add(String.valueOf(i));
+        }
+        return result;
+    }
+}`
+},
+{
+id:16,title:"Best Time to Buy and Sell Stock",difficulty:"Easy",topic:"Arrays",
+description:"Choose one day to buy and a later day to sell to maximize profit. Return zero if no profit is possible.",
+input:"[7, 1, 5, 3, 6, 4]",output:"5",
+explanation:"Buy at 1 and sell at 6 for a profit of 5.",
+solution:`class Solution {
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE, best = 0;
+        for (int p : prices) {
+            minPrice = Math.min(minPrice, p);
+            best = Math.max(best, p - minPrice);
+        }
+        return best;
+    }
+}`
+},
+{
+id:17,title:"Contains Duplicate",difficulty:"Easy",topic:"Hashing",
+description:"Return true if any integer occurs more than once.",
+input:"[1, 2, 3, 1]",output:"true",
+explanation:"The number 1 appears twice.",
+solution:`import java.util.HashSet;
+import java.util.Set;
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> seen = new HashSet<>();
+        for (int n : nums)
+            if (!seen.add(n)) return true;
+        return false;
+    }
+}`
+},
+{
+id:18,title:"Climbing Stairs",difficulty:"Easy",topic:"Math",
+description:"You can climb one or two steps at a time. Count the distinct ways to reach step n.",
+input:"n = 4",output:"5",
+explanation:"There are five ways to reach step four.",
+solution:`class Solution {
+    public int climbStairs(int n) {
+        if (n <= 2) return n;
+        int a = 1, b = 2;
+        for (int i = 3; i <= n; i++) {
+            int c = a + b;
+            a = b;
+            b = c;
+        }
+        return b;
+    }
+}`
+},
+{
+id:19,title:"Second Largest Distinct Element",difficulty:"Easy",topic:"Arrays",
+description:"Return the second largest distinct value in an integer array, or -1 if it does not exist.",
+input:"[10, 5, 10, 8]",output:"8",
+explanation:"The largest distinct value is 10 and the second largest is 8.",
+solution:`class Solution {
+    public int secondLargest(int[] a) {
+        int largest = Integer.MIN_VALUE;
+        int second = Integer.MIN_VALUE;
+        for (int x : a) {
+            if (x > largest) {
+                second = largest;
+                largest = x;
+            } else if (x > second && x < largest) {
+                second = x;
+            }
+        }
+        return second == Integer.MIN_VALUE ? -1 : second;
+    }
+}`
+},
+{
+id:20,title:"Count Vowels",difficulty:"Easy",topic:"Strings",
+description:"Count the vowels a, e, i, o, and u in a string, ignoring case.",
+input:'"Interview Prep"',output:"5",
+explanation:"Convert each character to lowercase and count vowels.",
+solution:`class Solution {
+    public int countVowels(String s) {
+        int count = 0;
+        for (char c : s.toLowerCase().toCharArray()) {
+            if ("aeiou".indexOf(c) >= 0) count++;
+        }
+        return count;
+    }
+}`
+}
+];
+
+const STORAGE_KEY = "interviewPrepCodingCompletedV1";
+let completedIds = new Set();
+
+try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (Array.isArray(saved)) completedIds = new Set(saved.map(Number));
+} catch (error) {
+    completedIds = new Set();
+}
+
+const search = document.getElementById("search");
+const difficulty = document.getElementById("difficulty");
+const topic = document.getElementById("topic");
+const completion = document.getElementById("completion");
+const problemList = document.getElementById("problemList");
+const statusMessage = document.getElementById("statusMessage");
+
+function updateStats() {
+    const done = problems.filter(p => completedIds.has(p.id)).length;
+    const total = problems.length;
+    const remaining = total - done;
+    const percentage = total ? Math.round(done / total * 100) : 0;
+
+    document.getElementById("total").textContent = total;
+    document.getElementById("completed").textContent = done;
+    document.getElementById("remaining").textContent = remaining;
+    document.getElementById("progressBar").style.width = percentage + "%";
+    document.getElementById("progressText").textContent =
+        percentage + "% completed (" + done + " of " + total + " problems)";
+}
+
+function renderProblems() {
+    const keyword = search.value.trim().toLowerCase();
+
+    const filtered = problems.filter(p => {
+        const matchesText = (p.title + " " + p.description + " " + p.topic)
+            .toLowerCase().includes(keyword);
+        const matchesDifficulty = !difficulty.value || p.difficulty === difficulty.value;
+        const matchesTopic = !topic.value || p.topic === topic.value;
+        const done = completedIds.has(p.id);
+        const matchesStatus = !completion.value ||
+            (completion.value === "done" ? done : !done);
+        return matchesText && matchesDifficulty && matchesTopic && matchesStatus;
+    });
+
+    problemList.innerHTML = "";
+    statusMessage.textContent = `Showing ${filtered.length} of ${problems.length} problems.`;
+
+    if (!filtered.length) {
+        problemList.innerHTML = '<div class="empty">No problems found. Try different filters.</div>';
+        return;
+    }
+
+    filtered.forEach(p => {
+        const done = completedIds.has(p.id);
+        const card = document.createElement("article");
+        card.className = "problem" + (done ? " completed" : "");
+
+        const badge = document.createElement("span");
+        badge.className = "badge " + p.difficulty.toLowerCase();
+        badge.textContent = p.difficulty;
+
+        const title = document.createElement("h3");
+        title.textContent = p.id + ". " + p.title;
+
+        const topicText = document.createElement("p");
+        topicText.className = "topic";
+        topicText.textContent = "Topic: " + p.topic;
+
+        const description = document.createElement("p");
+        description.className = "description";
+        description.textContent = p.description;
+
+        const example = document.createElement("div");
+        example.className = "example";
+        example.textContent =
+            `Input: ${p.input}\nOutput: ${p.output}\nExplanation: ${p.explanation}`;
+
+        const solutionWrap = document.createElement("div");
+        solutionWrap.className = "solution";
+        solutionWrap.hidden = true;
+
+        const code = document.createElement("pre");
+        code.textContent = p.solution;
+
+        const toggle = document.createElement("button");
+        toggle.textContent = "Show Java Solution";
+        toggle.addEventListener("click", () => {
+            solutionWrap.hidden = !solutionWrap.hidden;
+            toggle.textContent = solutionWrap.hidden
+                ? "Show Java Solution" : "Hide Java Solution";
+        });
+
+        const copy = document.createElement("button");
+        copy.textContent = "Copy Java Code";
+        copy.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(p.solution);
+                copy.textContent = "Copied!";
+            } catch (error) {
+                const area = document.createElement("textarea");
+                area.value = p.solution;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand("copy");
+                area.remove();
+                copy.textContent = "Copied!";
+            }
+            setTimeout(() => copy.textContent = "Copy Java Code", 1500);
+        });
+
+        solutionWrap.append(code, copy);
+
+        const mark = document.createElement("button");
+        mark.className = "complete-btn" + (done ? " done" : "");
+        mark.textContent = done ? "✓ Completed" : "Mark as Completed";
+
+        mark.addEventListener("click", () => {
+            if (completedIds.has(p.id)) completedIds.delete(p.id);
+            else completedIds.add(p.id);
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...completedIds]));
+            updateStats();
+            renderProblems();
+        });
+
+        card.append(badge, title, topicText, description, example,
+                    toggle, solutionWrap, mark);
+        problemList.appendChild(card);
+    });
+}
+
+search.addEventListener("input", renderProblems);
+difficulty.addEventListener("change", renderProblems);
+topic.addEventListener("change", renderProblems);
+completion.addEventListener("change", renderProblems);
+
+updateStats();
+renderProblems();
+</script>
+</body>
+</html>

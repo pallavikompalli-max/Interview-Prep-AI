@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Prep | Prepare. Practice. Succeed.</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #202b3c;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: #0b143d;
+            color: white;
+            padding: 16px 5%;
+            min-height: 68px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .nav-brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus {
+            color: #93c5fd;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #111b55, #4059a8);
+            color: white;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .hero h1 {
+            margin: 0 0 12px;
+            font-size: 32px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #e0e6ff;
+            line-height: 1.6;
+        }
+
+        /* Main content */
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            font-size: 21px;
+            margin-bottom: 16px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #18264a12;
+            border-bottom: 3px solid #536eaa;
+        }
+
+        .stat-card p {
+            margin: 0 0 12px;
+            font-weight: bold;
+            color: #536079;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 28px;
+            color: #263d83;
+        }
+
+        /* Search and filters */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .controls label {
+            font-weight: bold;
+        }
+
+        select,
+        input[type="search"] {
+            padding: 11px 12px;
+            border: 1px solid #cbd3e1;
+            border-radius: 7px;
+            background: white;
+            font-size: 14px;
+            color: #202b3c;
+        }
+
+        select {
+            min-width: 190px;
+            max-width: 100%;
+        }
+
+        #searchInput {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        select:focus,
+        input:focus {
+            outline: 2px solid #93b4ff;
+            outline-offset: 1px;
+        }
+
+        /* Question cards */
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            border-top: 4px solid #536eaa;
+            box-shadow: 0 3px 12px #18264a12;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            align-self: flex-start;
+            background: #e7efff;
+            color: #36559b;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .question-card h3 {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0 0 16px;
+            overflow-wrap: anywhere;
+        }
+
+        .answer {
+            background: #f2f6ff;
+            padding: 12px;
+            border-radius: 7px;
+            line-height: 1.7;
+            margin: 0 0 14px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .show-btn {
+            background: #4169c1;
+            color: white;
+        }
+
+        .show-btn:hover {
+            background: #2f50a0;
+        }
+
+        .practice-btn {
+            background: #e8edf5;
+            color: #34415a;
+        }
+
+        .practice-btn.done {
+            background: #d5f3e5;
+            color: #176342;
+        }
+
+        #message {
+            margin: 16px 0;
+            color: #536079;
+            line-height: 1.6;
+        }
+
+        .empty {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            text-align: center;
+            grid-column: 1 / -1;
+            color: #59657a;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: #6b7588;
+            font-size: 13px;
+        }
+
+        /* Tablet */
+        @media (max-width: 850px) {
+            .question-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+            .navbar {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 18px;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .question-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .controls {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .controls label {
+                width: 100%;
+            }
+
+            select,
+            #searchInput {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Main navigation bar -->
+    <nav class="navbar" aria-label="Main navigation">
+        <div class="nav-brand">Interview Prep</div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/coding.html">Coding Practice</a>
+            <a href="/ai.html">🤖 Ask AI</a>
+        </div>
+    </nav>
+
+    <!-- Hero section -->
+    <header class="hero">
+        <h1>Prepare. Practice. Succeed.</h1>
+        <p>
+            Practice technical interview questions, improve your coding
+            skills, and prepare for placements.
+        </p>
+    </header>
+
+    <main class="container">
+
+        <!-- Practice dashboard -->
+        <section aria-labelledby="dashboardHeading">
+            <h2 id="dashboardHeading">Your Practice Dashboard</h2>
+
+            <div class="dashboard">
+                <div class="stat-card">
+                    <p>Total Questions</p>
+                    <h3 id="totalCount">0</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Practiced</p>
+                    <h3 id="practicedCount">0</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Remaining</p>
+                    <h3 id="remainingCount">0</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview question bank -->
+        <section aria-labelledby="questionHeading">
+            <h2 id="questionHeading">Interview Question Bank</h2>
+
+            <p>
+                Choose a topic, search questions, reveal answers,
+                and track your practice.
+            </p>
+
+            <div class="controls">
+                <label for="topicFilter">Choose topic:</label>
+
+                <select id="topicFilter">
+                    <option value="">All Topics</option>
+                </select>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search questions, answers or topics..."
+                    aria-label="Search interview questions"
+                >
+            </div>
+
+            <p id="message" role="status" aria-live="polite">
+                Loading questions...
+            </p>
+
+            <div
+                id="questionList"
+                class="question-grid"
+                aria-live="polite"
+            ></div>
+        </section>
+
+    </main>
+
+    <footer>
+        Interview Prep | Keep learning, keep practicing!
+    </footer>
+
+    <script>
+        "use strict";
+
+        const topicFilter = document.getElementById("topicFilter");
+        const searchInput = document.getElementById("searchInput");
+        const questionList = document.getElementById("questionList");
+        const message = document.getElementById("message");
+
+        const totalCount = document.getElementById("totalCount");
+        const practicedCount = document.getElementById("practicedCount");
+        const remainingCount = document.getElementById("remainingCount");
+
+        let allQuestions = [];
+        let practicedIds = new Set();
+
+        // Load questions from the existing Spring Boot API.
+        async function loadQuestions() {
+            message.textContent = "Loading questions...";
+            questionList.replaceChildren();
+
+            try {
+                const response = await fetch("/api/questions");
+
+                if (!response.ok) {
+                    throw new Error("Could not load questions.");
+                }
+
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error("Unexpected question data.");
+                }
+
+                allQuestions = data;
+
+                populateTopics();
+                await loadProgress();
+                renderQuestions();
+
+            } catch (error) {
+                console.error(error);
+
+                message.textContent =
+                    "Could not load questions. Check that Spring Boot " +
+                    "and the database are running.";
+
+                questionList.replaceChildren();
+            }
+        }
+
+        // Automatically list all topics returned by the backend.
+        function populateTopics() {
+            const previousTopic = topicFilter.value;
+
+            topicFilter.replaceChildren();
+
+            const allOption = document.createElement("option");
+            allOption.value = "";
+            allOption.textContent = "All Topics";
+            topicFilter.appendChild(allOption);
+
+            const topics = [
+                ...new Set(
+                    allQuestions
+                        .map(question => String(question.topic || "").trim())
+                        .filter(Boolean)
+                )
+            ].sort((a, b) => a.localeCompare(b));
+
+            topics.forEach(topic => {
+                const option = document.createElement("option");
+                option.value = topic;
+                option.textContent = topic;
+                topicFilter.appendChild(option);
+            });
+
+            if (topics.includes(previousTopic)) {
+                topicFilter.value = previousTopic;
+            }
+        }
+
+        // Load saved progress from the existing API.
+        async function loadProgress() {
+            const response = await fetch("/api/progress");
+
+            if (!response.ok) {
+                throw new Error("Could not load practice progress.");
+            }
+
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                throw new Error("Unexpected progress data.");
+            }
+
+            practicedIds = new Set(
+                data.map(item => {
+                    if (typeof item === "object" && item !== null) {
+                        return Number(
+                            item.questionId ??
+                            item.question?.id ??
+                            item.id
+                        );
+                    }
+
+                    return Number(item);
+                }).filter(id => Number.isFinite(id) && id > 0)
+            );
+
+            updateDashboard();
+        }
+
+        // Update dashboard totals.
+        function updateDashboard() {
+            const total = allQuestions.length;
+
+            const practiced = allQuestions.filter(question =>
+                practicedIds.has(Number(question.id))
+            ).length;
+
+            totalCount.textContent = total;
+            practicedCount.textContent = practiced;
+            remainingCount.textContent = total - practiced;
+        }
+
+        // Filter and display questions.
+        function renderQuestions() {
+            const selectedTopic = topicFilter.value.trim().toLowerCase();
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            const filteredQuestions = allQuestions.filter(question => {
+                const topic = String(question.topic || "").toLowerCase();
+
+                const topicMatches =
+                    !selectedTopic || topic === selectedTopic;
+
+                const searchableText = [
+                    question.topic || "",
+                    question.question || "",
+                    question.answer || ""
+                ].join(" ").toLowerCase();
+
+                const searchMatches =
+                    !searchTerm || searchableText.includes(searchTerm);
+
+                return topicMatches && searchMatches;
+            });
+
+            questionList.replaceChildren();
+
+            if (filteredQuestions.length === 0) {
+                message.textContent = allQuestions.length === 0
+                    ? "No questions are available yet."
+                    : "No questions match your search.";
+
+                const empty = document.createElement("div");
+                empty.className = "empty";
+                empty.textContent =
+                    "Try another keyword or select All Topics.";
+
+                questionList.appendChild(empty);
+                return;
+            }
+
+            message.textContent =
+                "Showing " + filteredQuestions.length + " question(s).";
+
+            filteredQuestions.forEach((question, index) => {
+                const card = document.createElement("article");
+                card.className = "question-card";
+
+                const tag = document.createElement("span");
+                tag.className = "topic-tag";
+                tag.textContent = question.topic || "General";
+
+                const heading = document.createElement("h3");
+                heading.textContent =
+                    (index + 1) + ". " +
+                    (question.question || "Untitled question");
+
+                const answer = document.createElement("p");
+                answer.className = "answer";
+                answer.hidden = true;
+                answer.textContent =
+                    question.answer || "No answer has been added yet.";
+
+                const buttons = document.createElement("div");
+                buttons.className = "buttons";
+
+                // Show or hide the saved answer.
+                const showButton = document.createElement("button");
+                showButton.type = "button";
+                showButton.className = "show-btn";
+                showButton.textContent = "Show Answer";
+                showButton.setAttribute("aria-expanded", "false");
+
+                showButton.addEventListener("click", () => {
+                    answer.hidden = !answer.hidden;
+
+                    showButton.textContent = answer.hidden
+                        ? "Show Answer"
+                        : "Hide Answer";
+
+                    showButton.setAttribute(
+                        "aria-expanded",
+                        String(!answer.hidden)
+                    );
+                });
+
+                // Practice tracking through the existing API.
+                const practiceButton = document.createElement("button");
+                practiceButton.type = "button";
+                practiceButton.className = "practice-btn";
+
+                function updatePracticeButton() {
+                    const done = practicedIds.has(Number(question.id));
+
+                    practiceButton.textContent = done
+                        ? "✓ Practiced"
+                        : "Mark as Practiced";
+
+                    practiceButton.classList.toggle("done", done);
+                    practiceButton.setAttribute(
+                        "aria-pressed",
+                        String(done)
+                    );
+                }
+
+                updatePracticeButton();
+
+                practiceButton.addEventListener("click", async () => {
+                    const id = Number(question.id);
+
+                    if (!Number.isFinite(id) || id <= 0) {
+                        message.textContent =
+                            "This question has an invalid ID.";
+                        return;
+                    }
+
+                    const wasPracticed = practicedIds.has(id);
+
+                    practiceButton.disabled = true;
+                    message.textContent = "Saving practice progress...";
+
+                    try {
+                        const response = await fetch(
+                            "/api/progress/" + encodeURIComponent(id),
+                            {
+                                method: wasPracticed ? "DELETE" : "POST"
+                            }
+                        );
+
+                        if (!response.ok) {
+                            throw new Error(
+                                "Could not update practice status."
+                            );
+                        }
+
+                        if (wasPracticed) {
+                            practicedIds.delete(id);
+                        } else {
+                            practicedIds.add(id);
+                        }
+
+                        updatePracticeButton();
+                        updateDashboard();
+
+                        message.textContent =
+                            "Practice progress saved successfully.";
+
+                    } catch (error) {
+                        console.error(error);
+
+                        message.textContent =
+                            "Could not save progress. Please try again.";
+
+                    } finally {
+                        practiceButton.disabled = false;
+                    }
+                });
+
+                buttons.appendChild(showButton);
+                buttons.appendChild(practiceButton);
+
+                card.appendChild(tag);
+                card.appendChild(heading);
+                card.appendChild(answer);
+                card.appendChild(buttons);
+
+                questionList.appendChild(card);
+            });
+        }
+
+        topicFilter.addEventListener("change", renderQuestions);
+        searchInput.addEventListener("input", renderQuestions);
+
+        loadQuestions();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Interview Assistant</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+<style>
+:root {
+    --primary: #3159d8;
+    --primary-dark: #2445b3;
+    --bg: #f3f5fb;
+    --text: #172033;
+    --muted: #65718a;
+    --border: #dce3f0;
+    --card: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(120deg, #172554, #3159d8);
+    color: white;
+    padding: 27px 18px 23px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+header p {
+    color: #dce6ff;
+    margin: 8px 0 17px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+nav a:hover, nav a.active {
+    background: #ffffff25;
+}
+
+main {
+    max-width: 1000px;
+    margin: 32px auto;
+    padding: 0 18px 40px;
+}
+
+.panel {
+    background: var(--card);
+    padding: clamp(20px, 4vw, 34px);
+    border: 1px solid #e8ecf5;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px #263b6810;
+}
+
+.eyebrow {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+h2 {
+    margin: 5px 0;
+    font-size: 25px;
+    letter-spacing: -0.6px;
+}
+
+.description {
+    color: var(--muted);
+    margin: 8px 0 25px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    min-height: 155px;
+    padding: 15px;
+    border: 1px solid #cbd5e5;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 15px;
+    line-height: 1.7;
+    resize: vertical;
+    color: var(--text);
+    background: #fcfdff;
+    outline: none;
+    transition: border .2s, box-shadow .2s;
+}
+
+textarea:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #3159d81c;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 13px;
+    margin-top: 17px;
+}
+
+.field {
+    flex: 1 1 190px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    border: 1px solid #cbd5e5;
+    border-radius: 9px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+}
+
+button {
+    border: 0;
+    border-radius: 9px;
+    padding: 12px 18px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s, background .15s, opacity .15s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: wait;
+    transform: none;
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+    min-height: 45px;
+}
+
+.primary-btn:hover { background: var(--primary-dark); }
+
+.secondary-btn {
+    color: var(--primary);
+    background: #eaf0ff;
+}
+
+.hint {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.answer {
+    margin-top: 26px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.answer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 15px 20px;
+    background: #f7f9ff;
+    border-bottom: 1px solid var(--border);
+}
+
+.answer-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.answer-content {
+    padding: clamp(18px, 3vw, 28px);
+    font-size: 15px;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+}
+
+.answer-content h1,
+.answer-content h2,
+.answer-content h3,
+.answer-content h4 {
+    color: #2445a5;
+    line-height: 1.4;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.answer-content h1 { font-size: 25px; }
+.answer-content h2 { font-size: 22px; }
+.answer-content h3 { font-size: 18px; }
+.answer-content h4 { font-size: 16px; }
+
+.answer-content p { margin: 12px 0 18px; }
+
+.answer-content ul,
+.answer-content ol {
+    padding-left: 25px;
+    margin: 12px 0 20px;
+}
+
+.answer-content li { padding-left: 4px; margin: 7px 0; }
+
+.answer-content blockquote {
+    border-left: 4px solid var(--primary);
+    margin: 18px 0;
+    padding: 8px 16px;
+    background: #f4f7ff;
+    color: #45516b;
+}
+
+.answer-content a { color: var(--primary); }
+
+.answer-content hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 25px 0;
+}
+
+.answer-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    display: block;
+    overflow-x: auto;
+}
+
+.answer-content th,
+.answer-content td {
+    border: 1px solid var(--border);
+    padding: 10px 13px;
+    text-align: left;
+}
+
+.answer-content th { background: #f2f5fc; }
+
+.answer-content pre {
+    background: #172033;
+    border-radius: 10px;
+    padding: 18px;
+    overflow-x: auto;
+    line-height: 1.6;
+    margin: 18px 0;
+}
+
+.answer-content pre code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    white-space: pre;
+}
+
+.answer-content :not(pre) > code {
+    font-family: Consolas, monospace;
+    background: #edf1ff;
+    color: #2445a5;
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: .9em;
+}
+
+.error { color: #b42318; }
+
+.loading {
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.spinner {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #d7dff4;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 0 16px 25px;
+}
+
+@media (max-width: 600px) {
+    header { padding: 22px 12px; }
+    main { margin: 18px auto; padding: 0 12px 25px; }
+    .controls { align-items: stretch; }
+    .field { flex-basis: 100%; }
+    .primary-btn { width: 100%; }
+    .answer-header { align-items: flex-start; }
+    .answer-content { font-size: 14px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+    <h1>AI Interview Preparation Assistant</h1>
+    <p>Practice smarter. Prepare confidently. Get interview-ready.</p>
+    <nav>
+        <a href="/">Question Bank</a>
+        <a href="/coding.html">Coding Practice</a>
+        <a href="/ai.html" class="active">Ask AI</a>
+    </nav>
+</header>
+
+<main>
+<section class="panel">
+    <div class="eyebrow">Your personal study assistant</div>
+    <h2>Ask Your Question</h2>
+    <p class="description">
+        Get explanations, coding solutions, MCQs, and interview practice
+        for Java, DSA, SQL, DBMS, Python, AWS, AI/ML, OS, Networking, and more.
+    </p>
+
+    <label for="question">What do you want to learn?</label>
+    <textarea id="question" maxlength="5000"
+        placeholder="Example: Explain binary search with an example and Java code..."
+        aria-label="Enter your technical question"></textarea>
+
+    <div class="controls">
+        <div class="field">
+            <label for="mode">Answer type</label>
+            <select id="mode">
+                <option value="interview">Interview Explanation</option>
+                <option value="coding">Coding Solution</option>
+                <option value="mcq">Multiple Choice Questions (MCQs)</option>
+                <option value="simple">Simple Explanation for Beginners</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="language">Programming language</label>
+            <select id="language">
+                <option>Java</option>
+                <option>Python</option>
+                <option>C</option>
+                <option>C++</option>
+                <option>JavaScript</option>
+                <option>SQL</option>
+            </select>
+        </div>
+
+        <button class="primary-btn" id="askButton" onclick="askAI()">
+            Generate Answer
+        </button>
+    </div>
+
+    <p class="hint">
+        Tip: Include the topic, difficulty level, or example you want explained.
+    </p>
+
+    <section class="answer" id="result" hidden aria-live="polite">
+        <div class="answer-header">
+            <h3>AI Answer</h3>
+            <button class="secondary-btn" id="copyButton"
+                onclick="copyAnswer()" hidden>Copy Answer</button>
+        </div>
+        <div class="answer-content" id="answerText"></div>
+    </section>
+</section>
+</main>
+
+<footer>
+    Built for technical interview preparation · Keep practising every day
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js"></script>
+
+<script>
+const questionInput = document.getElementById("question");
+const askButton = document.getElementById("askButton");
+const result = document.getElementById("result");
+const answerText = document.getElementById("answerText");
+const copyButton = document.getElementById("copyButton");
+
+marked.setOptions({
+    gfm: true,
+    breaks: true
+});
+
+async function askAI() {
+    const question = questionInput.value.trim();
+    const mode = document.getElementById("mode").value;
+    const language = document.getElementById("language").value;
+
+    if (!question) {
+        alert("Please enter a question.");
+        questionInput.focus();
+        return;
+    }
+
+    askButton.disabled = true;
+    askButton.textContent = "Generating...";
+    result.hidden = false;
+    copyButton.hidden = true;
+    answerText.className = "answer-content";
+    answerText.innerHTML =
+        '<div class="loading"><span class="spinner"></span>' +
+        'Please wait. AI is preparing your answer...</div>';
+
+    const modeInstructions = {
+        interview: "Explain this as a technical interview preparation answer. Include a definition, key concepts, examples, common interview points, and complexity where relevant.",
+        coding: "Provide a complete solution in " + language +
+            ". Explain the approach, give correct runnable code, and include time and space complexity.",
+        mcq: "Create 5 useful multiple-choice questions about this topic. Include four options per question, the correct answer, and a short explanation.",
+        simple: "Explain this topic in simple beginner-friendly language with an analogy and a clear example."
+    };
+
+    const fullQuestion =
+        modeInstructions[mode] + "\n\nTopic/question: " + question;
+
+    try {
+        const response = await fetch("/api/ai/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                question: fullQuestion,
+                mode: mode,
+                language: language
+            })
+        });
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("The server returned an invalid response. Please try again.");
+        }
+
+        if (!response.ok) {
+            throw new Error(data.error || "Unable to generate an answer.");
+        }
+
+        if (!data.answer) {
+            throw new Error("The AI returned an empty answer. Please try again.");
+        }
+
+        const parsed = marked.parse(data.answer);
+        answerText.innerHTML = DOMPurify.sanitize(parsed);
+
+        answerText.querySelectorAll("pre code").forEach(block => {
+            if (window.hljs) {
+                hljs.highlightElement(block);
+            }
+        });
+
+        copyButton.hidden = false;
+
+    } catch (error) {
+        answerText.className = "answer-content error";
+        answerText.textContent = error.message ||
+            "Something went wrong. Please try again.";
+    } finally {
+        askButton.disabled = false;
+        askButton.textContent = "Generate Answer";
+    }
+}
+
+async function copyAnswer() {
+    const text = answerText.innerText || answerText.textContent || "";
+
+    try {
+        await navigator.clipboard.writeText(text);
+        copyButton.textContent = "Copied!";
+        setTimeout(() => {
+            copyButton.textContent = "Copy Answer";
+        }, 1500);
+    } catch {
+        const range = document.createRange();
+        range.selectNodeContents(answerText);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        copyButton.textContent = "Select and Copy";
+    }
+}
+
+questionInput.addEventListener("keydown", event => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+        askAI();
+    }
+});
+</script>
+</body>
+</html>
